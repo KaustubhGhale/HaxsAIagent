@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with AI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .chat-container {
+            width: 750px;
+            height: 600px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .top-bar {
+            background-color: #00796b;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .messages {
+            flex: 1;
+            padding: 10px;
+            height: 100%;
+            overflow-y: scroll;
+            display: flex;
+            flex-direction: column;
+            background-color: #e0f2f1;
+        }
+        .message {
+            margin: 5px 0;
+        }
+        .message.user {
+            align-self: flex-end;
+            background-color: #b2dfdb;
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
+        .message.ai {
+            align-self: flex-start;
+            background-color: #ffffff;
+            padding: 5px 10px;
+            border-radius: 10px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .input-box {
+            display: flex;
+            padding: 10px;
+            background-color: #f1f1f1;
+        }
+        .input-box input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .input-box button {
+            padding: 10px 15px;
+            margin-left: 10px;
+            border: none;
+            background-color: #00796b;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .input-box button:hover {
+            background-color: #004d40;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="top-bar">Chat with AI</div>
+        <div class="messages" id="messages"></div>
+        <div class="input-box">
+            <input type="text" id="userInput" placeholder="Type a message" required>
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script>
+        document.getElementById('userInput').focus();
+
+        async function sendMessage() {
+            const userInput = document.getElementById('userInput').value;
+            if (userInput === '') {
+                return;
+            }
+            document.getElementById('userInput').value = '';
+
+            const messagesDiv = document.getElementById('messages');
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.textContent = `You: ${userInput}`;
+            userMessageDiv.classList.add('message', 'user');
+            messagesDiv.appendChild(userMessageDiv);
+
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: userInput })
+            });
+
+            const data = await response.json();
+            const aiMessageDiv = document.createElement('div');
+            aiMessageDiv.textContent = `AI: ${data.response}`;
+            aiMessageDiv.classList.add('message', 'ai');
+            messagesDiv.appendChild(aiMessageDiv);
+
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            document.getElementById('userInput').focus();
+        }
+    </script>
+</body>
+</html>
