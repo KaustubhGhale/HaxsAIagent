@@ -73,7 +73,13 @@ This repository contains a simple web-based AI chat application using Flask and 
 - `cli.py`: Command-line interface script.
 - `templates/index.html`: HTML template for the web interface.
 - `static/`: Directory for static files (CSS, JavaScript).
-- 
+
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+  
 ## Libraries
 
 The following libraries are used in this project:
