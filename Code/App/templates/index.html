@@ -41,6 +41,9 @@
     <script>
         async function sendMessage() {
             const userInput = document.getElementById('userInput').value;
+            if (userInput === '') {
+                return;
+            }
             document.getElementById('userInput').value = '';
 
             const messagesDiv = document.getElementById('messages');
